@@ -2,57 +2,16 @@
 
 import styled, { createGlobalStyle } from 'styled-components'
 import { typography, fontWeightValues } from '@/styles/typography'
+import { colors } from '@/styles/colors'
 
-// 컬러 시스템 정의
-const colorSystem = {
-  neutral: {
-    black: '#000000',
-    darkText: '#1F1F1F',
-    textGrey: '#67727A',
-    iconGrey: '#8C929A',
-    borderGrey: '#D1DAE3',
-    disabledGrey: '#D7DBE1',
-    hoverGrey: '#D9E2ED',
-    surfaceGrey1: '#EDF2F8',
-  },
-  brand: {
-    deepBlue: '#0054C6',
-    skyBlue: '#68A9FF',
-    activeBlue: '#358CFF',
-    hoverBlue: '#E8F2FF',
-  },
-  system: {
-    error: {
-      alertRed: '#FF2732',
-      warningPink: '#FFC9C9',
-      errorBg: '#FCEFED',
-    },
-    success: {
-      successGreen: '#65FF17',
-      successBg: '#D4FFBF',
-    },
-    warning: {
-      warningYellow: '#F6FF4F',
-      warningBg: '#F9FF8C',
-    },
-    info: {
-      infoMint: '#3EFFEF',
-      infoBg: '#C5FFFA',
-    },
-  },
-  gradients: {
-    brand: 'linear-gradient(180deg, #68A9FF 0%, #0054C6 100%)',
-    grey: 'linear-gradient(180deg, #D9E2ED 0%, #B7BEC8 100%)',
-  },
-  background: {
-    white: '#FFFFFF',
-    grey: '#F2F3F6'
-  },
-} as const
+// For backward compatibility with existing code
+export const colorSystem = colors;
+
+// Import Pretendard font using <link> tag instead of @import in createGlobalStyle
+// This should be added to your _document.js or similar file
+// <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
 const GlobalStyles = createGlobalStyle`
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-
   /* CSS Reset */
   * {
     margin: 0;
@@ -74,45 +33,45 @@ const GlobalStyles = createGlobalStyle`
 
   :root {
     /* Neutral Colors */
-    --color-neutral-black: ${colorSystem.neutral.black};
-    --color-neutral-dark-text: ${colorSystem.neutral.darkText};
-    --color-neutral-text-grey: ${colorSystem.neutral.textGrey};
-    --color-neutral-icon-grey: ${colorSystem.neutral.iconGrey};
-    --color-neutral-border-grey: ${colorSystem.neutral.borderGrey};
-    --color-neutral-disabled-grey: ${colorSystem.neutral.disabledGrey};
-    --color-neutral-hover-grey: ${colorSystem.neutral.hoverGrey};
-    --color-neutral-surface-grey-1: ${colorSystem.neutral.surfaceGrey1};
+    --color-neutral-black: ${colors.neutral.black};
+    --color-neutral-dark-text: ${colors.neutral.darkText};
+    --color-neutral-text-grey: ${colors.neutral.textGrey};
+    --color-neutral-icon-grey: ${colors.neutral.iconGrey};
+    --color-neutral-border-grey: ${colors.neutral.borderGrey};
+    --color-neutral-disabled-grey: ${colors.neutral.disabledGrey};
+    --color-neutral-hover-grey: ${colors.neutral.hoverGrey};
+    --color-neutral-surface-grey-1: ${colors.neutral.surfaceGrey1};
 
     /* Brand Colors */
-    --color-brand-deep-blue: ${colorSystem.brand.deepBlue};
-    --color-brand-sky-blue: ${colorSystem.brand.skyBlue};
-    --color-brand-active-blue: ${colorSystem.brand.activeBlue};
-    --color-brand-hover-blue: ${colorSystem.brand.hoverBlue};
+    --color-brand-deep-blue: ${colors.brand.deepBlue};
+    --color-brand-sky-blue: ${colors.brand.skyBlue};
+    --color-brand-active-blue: ${colors.brand.activeBlue};
+    --color-brand-hover-blue: ${colors.brand.hoverBlue};
 
     /* System Colors - Error */
-    --color-system-error-alert: ${colorSystem.system.error.alertRed};
-    --color-system-error-warning: ${colorSystem.system.error.warningPink};
-    --color-system-error-bg: ${colorSystem.system.error.errorBg};
+    --color-system-error-alert: ${colors.system.error.alertRed};
+    --color-system-error-warning: ${colors.system.error.warningPink};
+    --color-system-error-bg: ${colors.system.error.errorBg};
 
     /* System Colors - Success */
-    --color-system-success-green: ${colorSystem.system.success.successGreen};
-    --color-system-success-bg: ${colorSystem.system.success.successBg};
+    --color-system-success-green: ${colors.system.success.successGreen};
+    --color-system-success-bg: ${colors.system.success.successBg};
 
     /* System Colors - Warning */
-    --color-system-warning-yellow: ${colorSystem.system.warning.warningYellow};
-    --color-system-warning-bg: ${colorSystem.system.warning.warningBg};
+    --color-system-warning-yellow: ${colors.system.warning.warningYellow};
+    --color-system-warning-bg: ${colors.system.warning.warningBg};
 
     /* System Colors - Info */
-    --color-system-info-mint: ${colorSystem.system.info.infoMint};
-    --color-system-info-bg: ${colorSystem.system.info.infoBg};
+    --color-system-info-mint: ${colors.system.info.infoMint};
+    --color-system-info-bg: ${colors.system.info.infoBg};
 
     /* Gradients */
-    --gradient-brand: ${colorSystem.gradients.brand};
-    --gradient-grey: ${colorSystem.gradients.grey};
+    --gradient-brand: ${colors.gradients.brand};
+    --gradient-grey: ${colors.gradients.grey};
 
     /* Background Colors */
-    --color-background-white: ${colorSystem.background.white};
-    --color-background-grey: ${colorSystem.background.grey};
+    --color-background-white: ${colors.background.white};
+    --color-background-grey: ${colors.background.grey};
   }
 
   /* Headline Styles */
@@ -250,11 +209,10 @@ const GlobalStyles = createGlobalStyle`
   .divider {
     width: 100%;
     height: 1px;
-    background-color: ${colorSystem.neutral.borderGrey};
+    background-color: ${colors.neutral.borderGrey};
   }
 `
 
-export { colorSystem }
 const StyledWrapper = styled.div``
 
 export default function GlobalStyleWrapper({ children }: { children: React.ReactNode }) {
@@ -264,4 +222,4 @@ export default function GlobalStyleWrapper({ children }: { children: React.React
       <StyledWrapper>{children}</StyledWrapper>
     </>
   )
-} 
+}

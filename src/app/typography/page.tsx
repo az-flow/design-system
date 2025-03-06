@@ -60,12 +60,12 @@ const Td = styled.td`
 const TypefaceExample = styled.div<{
   size: string;
   weight: string;
-  lineHeight: string;
+  lineheight: string;
 }>`
   font-family: 'Pretendard';
   font-size: ${props => props.size}px;
   font-weight: ${props => props.weight === 'Semi Bold' ? '600' : props.weight === 'Medium' ? '500' : '400'};
-  line-height: ${props => props.lineHeight}px;
+  line-height: ${props => props.lineheight}px;
   margin-bottom: 0.5rem;
 `
 
@@ -120,7 +120,7 @@ export default function TypographyPage() {
                   <TypefaceExample
                     size={font.size}
                     weight={font.weight}
-                    lineHeight={font.line}
+                    lineheight={font.line}
                   >
                     {font.name}
                   </TypefaceExample>
@@ -154,7 +154,7 @@ export default function TypographyPage() {
                   <TypefaceExample
                     size={font.size}
                     weight={font.weight}
-                    lineHeight={font.line}
+                    lineheight={font.line}
                   >
                     {font.name}
                   </TypefaceExample>

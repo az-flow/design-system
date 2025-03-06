@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { colorSystem } from '@/components/GlobalStyle'
+import { colors } from '@/styles/colors'
 import { 
   MdViewList, 
   MdAutoGraph, 
@@ -25,7 +25,7 @@ const MenuBar = styled.nav`
   position: relative;
   width: 286px;
   padding-bottom: 50px;
-  background: ${colorSystem.background.white};
+  background: ${colors.background.white};
 `
 
 const MenuContainer = styled.div`
@@ -52,7 +52,7 @@ const Divider = styled.div`
   width: 248px;
   height: 1px;
   margin: 0 19px;
-  background: ${colorSystem.neutral.borderGrey};
+  background: ${colors.neutral.borderGrey};
 `
 
 const MainMenu = styled.div`
@@ -89,7 +89,9 @@ const ArrowIcon = styled.div`
   color: inherit;
 `
 
-const MenuItem = styled.div<{ isActive?: boolean }>`
+const MenuItem = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isactive'
+})<{ isactive: string }>`
   position: relative;
   width: 100%;
   height: 44px;
@@ -97,17 +99,17 @@ const MenuItem = styled.div<{ isActive?: boolean }>`
   display: flex;
   align-items: center;
   gap: 14px;
-  background: ${props => props.isActive ? colorSystem.neutral.surfaceGrey1 : colorSystem.background.white};
+  background: ${props => props.isactive === 'true' ? colors.neutral.surfaceGrey1 : colors.background.white};
   border-radius: 7px;
   cursor: pointer;
-  color: ${props => props.isActive ? colorSystem.neutral.darkText : colorSystem.neutral.textGrey};
+  color: ${props => props.isactive === 'true' ? colors.neutral.darkText : colors.neutral.textGrey};
 
   &:hover {
-    background: ${colorSystem.neutral.surfaceGrey1};
-    color: ${colorSystem.neutral.darkText};
+    background: ${colors.neutral.surfaceGrey1};
+    color: ${colors.neutral.darkText};
 
     ${MenuLabel}, ${MenuIcon}, ${ArrowIcon} {
-      color: ${colorSystem.neutral.darkText};
+      color: ${colors.neutral.darkText};
     }
   }
 `
@@ -126,17 +128,28 @@ const SubMenuItem = styled(MenuItem)`
   padding: 12px 14px;
 `
 
-const SubMenuWrapper = styled.div<{ isOpen: boolean }>`
+const SubMenuWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isopen'
+})<{ isopen: boolean }>`
   overflow: hidden;
-  max-height: ${props => props.isOpen ? '500px' : '0'};
-  opacity: ${props => props.isOpen ? 1 : 0};
+  max-height: ${props => props.isopen ? '500px' : '0'};
+  opacity: ${props => props.isopen ? 1 : 0};
   transition: all 0.3s ease-in-out;
 `
 
 export default function NavigationPage() {
-  const [openMenus, setOpenMenus] = useState<string[]>(['admin']); // 초기값으로 admin 메뉴 열기
-  const [activeMenu, setActiveMenu] = useState<string>(''); // 선택된 메뉴 상태 추가
-  const [activeParentMenu, setActiveParentMenu] = useState<string>(''); // 선택된 상위 메뉴 상태 추가
+  const [mounted, setMounted] = useState(false)
+  const [openMenus, setOpenMenus] = useState<string[]>(['admin'])
+  const [activeMenu, setActiveMenu] = useState<string>('')
+  const [activeParentMenu, setActiveParentMenu] = useState<string>('')
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   const toggleMenu = (menuId: string) => {
     setOpenMenus(prev => 
@@ -169,7 +182,7 @@ export default function NavigationPage() {
               setActiveMenu('longlist');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'longlist'}
+            isactive={(activeMenu === 'longlist').toString()}
           >
             <MenuIcon>
               <MdViewList size={24} />
@@ -181,7 +194,7 @@ export default function NavigationPage() {
               setActiveMenu('dealflow');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'dealflow'}
+            isactive={(activeMenu === 'dealflow').toString()}
           >
             <MenuIcon>
               <MdAutoGraph size={24} />
@@ -193,7 +206,7 @@ export default function NavigationPage() {
               setActiveMenu('portfolio');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'portfolio'}
+            isactive={(activeMenu === 'portfolio').toString()}
           >
             <MenuIcon>
               <MdWork size={24} />
@@ -206,7 +219,7 @@ export default function NavigationPage() {
               setActiveMenu('dashboard');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'dashboard' || activeParentMenu === 'dashboard'}
+            isactive={(activeMenu === 'dashboard' || activeParentMenu === 'dashboard').toString()}
           >
             <MenuIcon>
               <MdDashboard size={24} />
@@ -216,11 +229,11 @@ export default function NavigationPage() {
               {isMenuOpen('dashboard') ? <MdKeyboardArrowUp size={20} /> : <MdKeyboardArrowDown size={20} />}
             </ArrowIcon>
           </MenuItem>
-          <SubMenuWrapper isOpen={isMenuOpen('dashboard')}>
+          <SubMenuWrapper isopen={isMenuOpen('dashboard')}>
             <SubMenu>
               <SubMenuItem
                 onClick={() => handleSubMenuClick('resource-dashboard', 'dashboard')}
-                isActive={activeMenu === 'resource-dashboard'}
+                isactive={(activeMenu === 'resource-dashboard').toString()}
               >
                 <MenuIcon>
                   <MdAutoGraph size={24} />
@@ -229,7 +242,7 @@ export default function NavigationPage() {
               </SubMenuItem>
               <SubMenuItem
                 onClick={() => handleSubMenuClick('performance-dashboard', 'dashboard')}
-                isActive={activeMenu === 'performance-dashboard'}
+                isactive={(activeMenu === 'performance-dashboard').toString()}
               >
                 <MenuIcon>
                   <MdAutoGraph size={24} />
@@ -243,7 +256,7 @@ export default function NavigationPage() {
               setActiveMenu('database');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'database'}
+            isactive={(activeMenu === 'database').toString()}
           >
             <MenuIcon>
               <MdStorage size={24} />
@@ -255,7 +268,7 @@ export default function NavigationPage() {
               setActiveMenu('report');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'report'}
+            isactive={(activeMenu === 'report').toString()}
           >
             <MenuIcon>
               <MdDescription size={24} />
@@ -268,7 +281,7 @@ export default function NavigationPage() {
               setActiveMenu('admin');
               setActiveParentMenu('');
             }}
-            isActive={activeMenu === 'admin' || activeParentMenu === 'admin'}
+            isactive={(activeMenu === 'admin' || activeParentMenu === 'admin').toString()}
           >
             <MenuIcon>
               <MdAdminPanelSettings size={24} />
@@ -278,11 +291,11 @@ export default function NavigationPage() {
               {isMenuOpen('admin') ? <MdKeyboardArrowUp size={20} /> : <MdKeyboardArrowDown size={20} />}
             </ArrowIcon>
           </MenuItem>
-          <SubMenuWrapper isOpen={isMenuOpen('admin')}>
+          <SubMenuWrapper isopen={isMenuOpen('admin')}>
             <SubMenu>
               <SubMenuItem
                 onClick={() => handleSubMenuClick('organization', 'admin')}
-                isActive={activeMenu === 'organization'}
+                isactive={(activeMenu === 'organization').toString()}
               >
                 <MenuIcon>
                   <HiUsers size={24} />
@@ -291,7 +304,7 @@ export default function NavigationPage() {
               </SubMenuItem>
               <SubMenuItem
                 onClick={() => handleSubMenuClick('fund', 'admin')}
-                isActive={activeMenu === 'fund'}
+                isactive={(activeMenu === 'fund').toString()}
               >
                 <MenuIcon>
                   <HiCurrencyDollar size={24} />
@@ -300,7 +313,7 @@ export default function NavigationPage() {
               </SubMenuItem>
               <SubMenuItem
                 onClick={() => handleSubMenuClick('stakeholder', 'admin')}
-                isActive={activeMenu === 'stakeholder'}
+                isactive={(activeMenu === 'stakeholder').toString()}
               >
                 <MenuIcon>
                   <HiUserGroup size={24} />
@@ -309,7 +322,7 @@ export default function NavigationPage() {
               </SubMenuItem>
               <SubMenuItem
                 onClick={() => handleSubMenuClick('channel', 'admin')}
-                isActive={activeMenu === 'channel'}
+                isactive={(activeMenu === 'channel').toString()}
               >
                 <MenuIcon>
                   <HiLightBulb size={24} />

@@ -2,7 +2,8 @@
 
 import styled from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
-import { Section, SectionInner, SectionTitle, Grid } from '@/app/sections/page'
+import { Section, SectionInner, SectionTitle, Grid } from '@/components/ui/Section'
+import { FormField } from '@/components/ui/Fields'
 import { MdHelpOutline } from 'react-icons/md'
 
 const Container = styled.div`
@@ -28,7 +29,7 @@ const FieldContainer = styled.div`
     grid-column: 1 / -1;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 890px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -175,27 +176,39 @@ export default function FieldsPage() {
               <SectionTitle className="h6">FormField View - P type</SectionTitle>
             </div>
             <FieldContainer>
-              <VerticalFormField 
-                label="라벨" 
-                value="표시값"
-              />
-              <VerticalFormField 
-                label="텍스트" 
-                value="안녕하세요반가워요"
-              />
-              <VerticalFormField 
-                label="숫자" 
-                value="3,484,000"
-              />
-              <VerticalFormField 
-                label="날짜" 
-                value="2024.01.13"
-              />
-              <VerticalFormField 
-                label="툴팁" 
-                value="물음표에 hover하세요."
-                tooltip="물음표에 hover하면 툴팁이 표기됩니다."
-              />
+              <Grid columns={4}>
+                <FormField 
+                  label="라벨" 
+                  value="표시값"
+                  orientation="vertical"
+                />
+                <FormField 
+                  label="텍스트" 
+                  value="안녕하세요반가워요"
+                  orientation="vertical"
+                />
+                <FormField 
+                  label="숫자" 
+                  value="3,484,000"
+                  orientation="vertical"
+                />
+                <FormField 
+                  label="날짜" 
+                  value="2024.01.13"
+                  orientation="vertical"
+                />
+                <FormField 
+                  label="툴팁" 
+                  value="물음표에 hover하세요."
+                  tooltip="물음표에 hover하면 툴팁이 표기됩니다."
+                  orientation="vertical"
+                />
+                <FormField 
+                  label="날짜" 
+                  value="2024.01.13"
+                  orientation="vertical"
+                />
+              </Grid>
             </FieldContainer>
           </SectionInner>
         </Section>
@@ -206,26 +219,31 @@ export default function FieldsPage() {
               <SectionTitle className="h6">FormField View - Span type</SectionTitle>
             </div>
             <SpanFieldContainer>
-              <HorizontalFormField 
+              <FormField 
                 label="라벨" 
                 value="표시값"
+                orientation="horizontal"
               />
-              <HorizontalFormField 
+              <FormField 
                 label="텍스트" 
                 value="안녕하세요반가워요"
+                orientation="horizontal"
               />
-              <HorizontalFormField 
+              <FormField 
                 label="숫자" 
                 value="3,484,000"
+                orientation="horizontal"
               />
-              <HorizontalFormField 
+              <FormField 
                 label="날짜" 
                 value="2024.01.13"
+                orientation="horizontal"
               />
-              <HorizontalFormField 
+              <FormField 
                 label="툴팁" 
                 value="물음표에 hover하세요."
                 tooltip="물음표에 hover하면 툴팁이 표기됩니다."
+                orientation="horizontal"
               />
             </SpanFieldContainer>
           </SectionInner>

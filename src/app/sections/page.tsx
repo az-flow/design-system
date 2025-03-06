@@ -22,11 +22,11 @@ export const Grid = styled.div<{ columns?: 1 | 2 | 3 | 4 }>`
   width: 100%;
   grid-template-columns: repeat(1, 1fr);
 
-  @media (min-width: 768px) {
+  @media (min-width: 890px) and (max-width: 1023px) {
     grid-template-columns: repeat(${props => Math.min(2, props.columns || 1)}, 1fr);
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1024px) and (max-width: 1279px) {
     grid-template-columns: repeat(${props => Math.min(3, props.columns || 1)}, 1fr);
   }
 
@@ -35,29 +35,29 @@ export const Grid = styled.div<{ columns?: 1 | 2 | 3 | 4 }>`
   }
 `
 
-export const Section = styled.div<{ collapsible?: boolean }>`
+export const Section = styled.div<{ $collapsible?: boolean }>`
   width: 100%;
 `
 
-export const SectionInner = styled.div<{ collapsible?: boolean; isOpen?: boolean; clickable?: boolean }>`
+export const SectionInner = styled.div<{ $collapsible?: boolean; $isOpen?: boolean; $clickable?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 29px 21px;
-  gap: ${props => props.collapsible ? (props.isOpen ? '34px' : '0') : '34px'};
+  gap: ${props => props.$collapsible ? (props.$isOpen ? '34px' : '0') : '34px'};
   background: ${colorSystem.background.white};
   border: 1px solid ${colorSystem.neutral.borderGrey};
   border-radius: 13px;
-  cursor: ${props => (props.collapsible || props.clickable) ? 'pointer' : 'default'};
+  cursor: ${props => (props.$collapsible || props.$clickable) ? 'pointer' : 'default'};
   transition: background-color 0.2s ease-in-out;
 
-  ${props => props.clickable && `
+  ${props => props.$clickable && `
     &:hover {
       background: ${colorSystem.background.grey};
     }
   `}
 
-  ${props => (props.collapsible || props.clickable) && `
+  ${props => (props.$collapsible || props.$clickable) && `
     > div:first-child {
       display: flex;
       justify-content: space-between;
@@ -71,27 +71,27 @@ export const SectionTitle = styled.h6`
   color: ${colorSystem.neutral.black};
 `
 
-export const SectionContent = styled.div<{ isOpen?: boolean }>`
+export const SectionContent = styled.div<{ $isOpen?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: ${props => props.isOpen === undefined ? 'auto' : props.isOpen ? 'auto' : '0'};
+  height: ${props => props.$isOpen === undefined ? 'auto' : props.$isOpen ? 'auto' : '0'};
   overflow: hidden;
-  opacity: ${props => props.isOpen === undefined ? '1' : props.isOpen ? '1' : '0'};
-  transition: ${props => props.isOpen === undefined ? 'none' : 'all 0.3s ease-in-out'};
+  opacity: ${props => props.$isOpen === undefined ? '1' : props.$isOpen ? '1' : '0'};
+  transition: ${props => props.$isOpen === undefined ? 'none' : 'all 0.3s ease-in-out'};
 `
 
-const ChevronIcon = styled.svg<{ isOpen?: boolean; direction?: 'down' | 'right' }>`
+const ChevronIcon = styled.svg<{ $isOpen?: boolean; $direction?: 'down' | 'right' }>`
   width: 24px;
   height: 24px;
   transform: ${props => {
-    if (props.direction === 'right') return 'rotate(-90deg)';
-    return props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    if (props.$direction === 'right') return 'rotate(-90deg)';
+    return props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
   }};
   transition: transform 0.3s ease-in-out;
 `
 
-const UserCard = styled.div<{ clickable?: boolean }>`
+const UserCard = styled.div<{ $clickable?: boolean }>`
   position: relative;
   width: 100%;
   height: 85px;
@@ -101,10 +101,10 @@ const UserCard = styled.div<{ clickable?: boolean }>`
   justify-content: space-between;
   align-items: center;
   padding: 19px 18px;
-  cursor: ${props => props.clickable ? 'pointer' : 'default'};
+  cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: background-color 0.2s ease-in-out;
 
-  ${props => props.clickable && `
+  ${props => props.$clickable && `
     &:hover {
       background: ${colorSystem.background.grey};
     }
@@ -205,11 +205,11 @@ export default function SectionsPage() {
       </Section>
 
       <Section>
-        <SectionInner clickable onClick={() => console.log('clicked')}>
+        <SectionInner $clickable onClick={() => console.log('clicked')}>
           <div>
             <SectionTitle className="h6">H6.클릭가능섹션</SectionTitle>
             <ChevronIcon 
-              direction="right"
+              $direction="right"
               viewBox="0 0 24 24" 
               fill="none" 
               stroke={colorSystem.neutral.black}
@@ -227,12 +227,12 @@ export default function SectionsPage() {
         </SectionInner>
       </Section>
 
-      <Section collapsible>
-        <SectionInner collapsible isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <Section $collapsible>
+        <SectionInner $collapsible $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
           <div>
             <SectionTitle className="h6">H6.접히는섹션</SectionTitle>
             <ChevronIcon 
-              isOpen={isOpen}
+              $isOpen={isOpen}
               viewBox="0 0 24 24" 
               fill="none" 
               stroke={colorSystem.neutral.black}
@@ -243,7 +243,7 @@ export default function SectionsPage() {
               <path d="M6 9l6 6 6-6"/>
             </ChevronIcon>
           </div>
-          <SectionContent isOpen={isOpen}>
+          <SectionContent $isOpen={isOpen}>
             <p className="body1">접히는 섹션 입니다.</p>
             <p className="body1">섹션 헤더를 클릭하면 접힙니다.</p>
           </SectionContent>
@@ -431,7 +431,7 @@ export default function SectionsPage() {
 
             <p className="body1">1열 카드</p>
             <Grid>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=32"
@@ -443,7 +443,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -458,7 +458,7 @@ export default function SectionsPage() {
 
             <p className="body1" style={{ marginTop: '34px' }}>2열 카드</p>
             <Grid columns={2}>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=32"
@@ -470,7 +470,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -481,7 +481,7 @@ export default function SectionsPage() {
                   <path d="M6 9l6 6 6-6"/>
                 </ChevronIcon>
               </UserCard>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=33"
@@ -493,7 +493,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -508,7 +508,7 @@ export default function SectionsPage() {
 
             <p className="body1" style={{ marginTop: '34px' }}>3열 카드</p>
             <Grid columns={3}>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=32"
@@ -520,7 +520,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -531,7 +531,7 @@ export default function SectionsPage() {
                   <path d="M6 9l6 6 6-6"/>
                 </ChevronIcon>
               </UserCard>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=33"
@@ -543,7 +543,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -554,7 +554,7 @@ export default function SectionsPage() {
                   <path d="M6 9l6 6 6-6"/>
                 </ChevronIcon>
               </UserCard>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=34"
@@ -566,7 +566,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -581,7 +581,7 @@ export default function SectionsPage() {
 
             <p className="body1" style={{ marginTop: '34px' }}>4열 카드</p>
             <Grid columns={4}>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=32"
@@ -593,7 +593,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -604,7 +604,7 @@ export default function SectionsPage() {
                   <path d="M6 9l6 6 6-6"/>
                 </ChevronIcon>
               </UserCard>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=33"
@@ -616,7 +616,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -627,7 +627,7 @@ export default function SectionsPage() {
                   <path d="M6 9l6 6 6-6"/>
                 </ChevronIcon>
               </UserCard>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=34"
@@ -639,7 +639,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
@@ -650,7 +650,7 @@ export default function SectionsPage() {
                   <path d="M6 9l6 6 6-6"/>
                 </ChevronIcon>
               </UserCard>
-              <UserCard clickable>
+              <UserCard $clickable>
                 <UserInfo>
                   <UserAvatar 
                     imageUrl="https://i.pravatar.cc/150?img=35"
@@ -662,7 +662,7 @@ export default function SectionsPage() {
                   </UserTextInfo>
                 </UserInfo>
                 <ChevronIcon 
-                  direction="right"
+                  $direction="right"
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke={colorSystem.neutral.black}
