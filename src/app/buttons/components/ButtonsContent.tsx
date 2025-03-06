@@ -1,9 +1,171 @@
 'use client'
 
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
-import { Section, SectionInner, SectionTitle, SectionContent, Grid } from '@/app/sections/page'
+import { Section, SectionInner, SectionTitle, SectionContent } from '@/app/sections/page'
 
+// Types
+type ButtonSize = 'large' | 'mid' | 'small' | 'xsmall' | 'xxsmall'
+type ButtonColor = 'special' | 'special_disabled' | 'primary' | 'subprimary' | 'disabled' | 'alert'
+type ButtonType = 'filled' | 'outline'
+
+interface ButtonProps {
+  $type: ButtonType
+  $color: ButtonColor
+  $size: ButtonSize
+}
+
+// Size styles
+const buttonSizeStyles = {
+  large: css`
+    min-width: 120px;
+    height: 56px;
+    padding: 16px 23px;
+    font-size: 20px;
+  `,
+  mid: css`
+    min-width: 100px;
+    height: 48px;
+    padding: 14px 20px;
+    font-size: 18px;
+  `,
+  small: css`
+    min-width: 90px;
+    height: 40px;
+    padding: 12px 18px;
+    font-size: 16px;
+  `,
+  xsmall: css`
+    min-width: 80px;
+    height: 36px;
+    padding: 10px 16px;
+    font-size: 14px;
+  `,
+  xxsmall: css`
+    min-width: 70px;
+    height: 32px;
+    padding: 8px 14px;
+    font-size: 12px;
+  `
+}
+
+// Color styles
+const buttonColorStyles = {
+  filled: {
+    special: css`
+      background: ${colorSystem.gradients.brand.replace('0deg', '270deg')};
+      color: ${colorSystem.background.white};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `,
+    special_disabled: css`
+      background: ${colorSystem.gradients.grey.replace('0deg', '270deg')};
+      color: ${colorSystem.background.white};
+    `,
+    primary: css`
+      background: ${colorSystem.brand.deepBlue};
+      color: ${colorSystem.background.white};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `,
+    subprimary: css`
+      background: ${colorSystem.brand.skyBlue};
+      color: ${colorSystem.background.white};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `,
+    disabled: css`
+      background: ${colorSystem.neutral.disabledGrey};
+      color: ${colorSystem.background.white};
+      cursor: not-allowed;
+    `,
+    alert: css`
+      background: ${colorSystem.system.error.alertRed};
+      color: ${colorSystem.background.white};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `
+  },
+  outline: {
+    special: css`
+      border-color: ${colorSystem.brand.deepBlue};
+      color: ${colorSystem.brand.deepBlue};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `,
+    special_disabled: css`
+      border-color: ${colorSystem.neutral.disabledGrey};
+      color: ${colorSystem.neutral.disabledGrey};
+      cursor: not-allowed;
+    `,
+    primary: css`
+      border-color: ${colorSystem.brand.deepBlue};
+      color: ${colorSystem.brand.deepBlue};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `,
+    subprimary: css`
+      border-color: ${colorSystem.brand.skyBlue};
+      color: ${colorSystem.brand.skyBlue};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `,
+    disabled: css`
+      border-color: ${colorSystem.neutral.disabledGrey};
+      color: ${colorSystem.neutral.disabledGrey};
+      cursor: not-allowed;
+    `,
+    alert: css`
+      border-color: ${colorSystem.system.error.alertRed};
+      color: ${colorSystem.system.error.alertRed};
+      &:hover {
+        filter: brightness(0.9);
+      }
+    `
+  }
+}
+
+// Button Component
+const Button = styled.button<ButtonProps>`
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  position: relative;
+
+  /* Common styles */
+  border-radius: 7px;
+  font-weight: ${props => props.$type === 'filled' ? 600 : 500};
+  line-height: 1.2;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  /* Type specific styles */
+  ${props => props.$type === 'filled' ? css`
+    border: none;
+  ` : css`
+    background: ${colorSystem.background.white};
+    border: 1px solid;
+  `}
+
+  /* Size styles */
+  ${props => buttonSizeStyles[props.$size]}
+
+  /* Color styles */
+  ${props => buttonColorStyles[props.$type][props.$color]}
+`
+
+// Layout Components
 const Container = styled.div`
   padding: 40px;
   display: flex;
@@ -32,11 +194,11 @@ const SizeLabel = styled.div`
   min-width: 70px;
   flex: 1;
   
-  &:nth-child(1) { min-width: 120px; }  /* large */
-  &:nth-child(2) { min-width: 100px; }  /* mid */
-  &:nth-child(3) { min-width: 90px; }   /* small */
-  &:nth-child(4) { min-width: 80px; }   /* xsmall */
-  &:nth-child(5) { min-width: 70px; }   /* xxsmall */
+  &:nth-child(1) { min-width: 120px; }
+  &:nth-child(2) { min-width: 100px; }
+  &:nth-child(3) { min-width: 90px; }
+  &:nth-child(4) { min-width: 80px; }
+  &:nth-child(5) { min-width: 70px; }
 `
 
 const SizeLabelRow = styled(ButtonRow)`
@@ -45,153 +207,10 @@ const SizeLabelRow = styled(ButtonRow)`
   gap: 12px;
 `
 
-interface ButtonProps {
-  $size?: 'large' | 'mid' | 'small' | 'xsmall' | 'xxsmall';
-  $variant?: 'gradientBrand' | 'gradientGrey' | 'deepBlue' | 'skyBlue' | 'disabledGrey' | 'alertRed';
-}
-
-const getButtonSize = (size: ButtonProps['$size']) => {
-  switch (size) {
-    case 'large':
-      return { minWidth: '120px', height: '56px', padding: '16px 23px', fontSize: '20px' };
-    case 'mid':
-      return { minWidth: '100px', height: '48px', padding: '14px 20px', fontSize: '18px' };
-    case 'small':
-      return { minWidth: '90px', height: '40px', padding: '12px 18px', fontSize: '16px' };
-    case 'xsmall':
-      return { minWidth: '80px', height: '36px', padding: '10px 16px', fontSize: '14px' };
-    case 'xxsmall':
-      return { minWidth: '70px', height: '32px', padding: '8px 14px', fontSize: '12px' };
-    default:
-      return { minWidth: '120px', height: '56px', padding: '16px 23px', fontSize: '20px' };
-  }
-};
-
-const getButtonColor = (variant: ButtonProps['$variant']) => {
-  switch (variant) {
-    case 'gradientBrand':
-      return { background: colorSystem.gradients.brand.replace('0deg', '270deg') };
-    case 'gradientGrey':
-      return { background: colorSystem.gradients.grey.replace('0deg', '270deg') };
-    case 'deepBlue':
-      return { background: colorSystem.brand.deepBlue };
-    case 'skyBlue':
-      return { background: colorSystem.brand.skyBlue };
-    case 'disabledGrey':
-      return { background: colorSystem.neutral.disabledGrey, cursor: 'not-allowed' };
-    case 'alertRed':
-      return { background: colorSystem.system.error.alertRed };
-    default:
-      return { background: colorSystem.brand.skyBlue };
-  }
-};
-
-const getOutlineButtonStyle = (variant?: ButtonProps['$variant']) => {
-  switch (variant) {
-    case 'deepBlue':
-      return { borderColor: colorSystem.brand.deepBlue, color: colorSystem.brand.deepBlue };
-    case 'skyBlue':
-      return { borderColor: colorSystem.brand.skyBlue, color: colorSystem.brand.skyBlue };
-    case 'alertRed':
-      return { borderColor: colorSystem.system.error.alertRed, color: colorSystem.system.error.alertRed };
-    case 'disabledGrey':
-      return { borderColor: colorSystem.neutral.disabledGrey, color: colorSystem.neutral.disabledGrey, cursor: 'not-allowed' };
-    default:
-      return { borderColor: colorSystem.neutral.borderGrey, color: colorSystem.neutral.black };
-  }
-};
-
-const FilledButton = styled.button<ButtonProps>`
-  /* Auto layout */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-
-  /* Size & Position */
-  ${props => getButtonSize(props.$size)}
-  position: relative;
-
-  /* Style */
-  ${props => getButtonColor(props.$variant)}
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-
-  /* Text Style */
-  color: ${colorSystem.background.white};
-  font-weight: 600;
-  line-height: 1.2;
-
-  /* Transition */
-  transition: filter 0.2s ease;
-
-  /* Hover Effect */
-  &:hover {
-    ${props => 
-      props.$variant === 'disabledGrey' || props.$variant === 'gradientGrey' 
-        ? '' 
-        : `filter: brightness(0.9);`
-    }
-  }
-`
-
-const OutlineButton = styled.button<ButtonProps>`
-  /* Auto layout */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  box-sizing: border-box;
-
-  /* Size & Position */
-  ${props => getButtonSize(props.$size)}
-  position: relative;
-
-  /* Style */
-  background: ${colorSystem.background.white};
-  border: 1px solid;
-  border-radius: 7px;
-  ${props => getOutlineButtonStyle(props.$variant)}
-  cursor: ${props => props.$variant === 'disabledGrey' ? 'not-allowed' : 'pointer'};
-
-  /* Text Style */
-  font-weight: 500;
-  line-height: 1.2;
-
-  /* Transition */
-  transition: all 0.2s ease;
-
-  /* Hover Effect */
-  &:hover {
-    ${props => {
-      if (props.$variant === 'disabledGrey') return '';
-      if (props.$variant === undefined) {
-        return `
-          border-color: ${colorSystem.neutral.textGrey};
-          color: ${colorSystem.neutral.textGrey};
-        `;
-      }
-      return `
-        filter: brightness(0.9);
-      `;
-    }}
-  }
-`
-
+// Main Component
 export default function ButtonsContent() {
-  const sizes: ButtonProps['$size'][] = ['large', 'mid', 'small', 'xsmall', 'xxsmall'];
-  const variants: NonNullable<ButtonProps['$variant']>[] = ['gradientBrand', 'gradientGrey', 'deepBlue', 'skyBlue', 'disabledGrey', 'alertRed'];
-  const variantLabels: Record<NonNullable<ButtonProps['$variant']>, string> = {
-    gradientBrand: 'special',
-    gradientGrey: 'special_disabled',
-    deepBlue: 'primary',
-    skyBlue: 'subprimary',
-    disabledGrey: 'disabled',
-    alertRed: 'alert'
-  };
+  const sizes: ButtonSize[] = ['large', 'mid', 'small', 'xsmall', 'xxsmall']
+  const colors: ButtonColor[] = ['special', 'special_disabled', 'primary', 'subprimary', 'disabled', 'alert']
 
   return (
     <Container>
@@ -206,17 +225,18 @@ export default function ButtonsContent() {
                 <SizeLabel key={size}>{size}</SizeLabel>
               ))}
             </SizeLabelRow>
-            {variants.map(variant => (
-              <ButtonRow key={variant}>
-                <VariantLabel>{variantLabels[variant]}</VariantLabel>
+            {colors.map(color => (
+              <ButtonRow key={color}>
+                <VariantLabel>{color}</VariantLabel>
                 {sizes.map(size => (
-                  <FilledButton 
-                    key={`${variant}-${size}`}
+                  <Button
+                    key={`${color}-${size}`}
+                    $type="filled"
+                    $color={color}
                     $size={size}
-                    $variant={variant}
                   >
                     확인
-                  </FilledButton>
+                  </Button>
                 ))}
               </ButtonRow>
             ))}
@@ -235,65 +255,21 @@ export default function ButtonsContent() {
                 <SizeLabel key={size}>{size}</SizeLabel>
               ))}
             </SizeLabelRow>
-            <ButtonRow>
-              <VariantLabel>default</VariantLabel>
-              {sizes.map(size => (
-                <OutlineButton 
-                  key={size}
-                  $size={size}
-                >
-                  확인
-                </OutlineButton>
-              ))}
-            </ButtonRow>
-            <ButtonRow>
-              <VariantLabel>primary</VariantLabel>
-              {sizes.map(size => (
-                <OutlineButton 
-                  key={size}
-                  $size={size}
-                  $variant="deepBlue"
-                >
-                  확인
-                </OutlineButton>
-              ))}
-            </ButtonRow>
-            <ButtonRow>
-              <VariantLabel>subprimary</VariantLabel>
-              {sizes.map(size => (
-                <OutlineButton 
-                  key={size}
-                  $size={size}
-                  $variant="skyBlue"
-                >
-                  확인
-                </OutlineButton>
-              ))}
-            </ButtonRow>
-            <ButtonRow>
-              <VariantLabel>alert</VariantLabel>
-              {sizes.map(size => (
-                <OutlineButton 
-                  key={size}
-                  $size={size}
-                  $variant="alertRed"
-                >
-                  확인
-                </OutlineButton>
-              ))}
-            </ButtonRow>
-            <ButtonRow>
-              <VariantLabel>disabled</VariantLabel>
-              {sizes.map(size => (
-                <OutlineButton 
-                  key={size}
-                  $size={size}
-                  $variant="disabledGrey"
-                >
-                  확인
-                </OutlineButton>
-              ))}
-            </ButtonRow>
+            {colors.map(color => (
+              <ButtonRow key={color}>
+                <VariantLabel>{color}</VariantLabel>
+                {sizes.map(size => (
+                  <Button
+                    key={`${color}-${size}`}
+                    $type="outline"
+                    $color={color}
+                    $size={size}
+                  >
+                    확인
+                  </Button>
+                ))}
+              </ButtonRow>
+            ))}
           </SectionContent>
         </SectionInner>
       </Section>
