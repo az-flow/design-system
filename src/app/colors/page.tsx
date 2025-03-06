@@ -2,26 +2,22 @@
 
 import styled from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
+import { Section, SectionInner, SectionTitle, Grid } from '@/app/sections/page'
 
 const Container = styled.div`
   padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 `
 
 const Title = styled.h2`
   margin-bottom: 48px;
 `
 
-const Section = styled.section`
-  margin-bottom: 48px;
-`
-
-const SectionTitle = styled.h4`
-  margin-bottom: 24px;
-`
-
 const ColorGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 `
 
@@ -63,82 +59,104 @@ export default function ColorsPage() {
     <Container>
       <Title>컬러 시스템</Title>
 
-      <Section>
-        <SectionTitle>중립 컬러 (Neutral)</SectionTitle>
-        <ColorGrid>
-          {Object.entries(colorSystem.neutral).map(([key, value]) => (
-            <ColorItem key={key}>
-              <ColorBox color={value} />
-              <ColorNameWrapper>
-                <ColorName>{key}</ColorName>
-                <ColorHex>{value}</ColorHex>
-              </ColorNameWrapper>
-            </ColorItem>
-          ))}
-        </ColorGrid>
-      </Section>
+      <Grid columns={2}>
+        <Section>
+          <SectionInner>
+            <div>
+              <SectionTitle className="h6">중립 컬러 (Neutral)</SectionTitle>
+            </div>
+            <ColorGrid>
+              {Object.entries(colorSystem.neutral).map(([key, value]) => (
+                <ColorItem key={key}>
+                  <ColorBox color={value} />
+                  <ColorNameWrapper>
+                    <ColorName>{key}</ColorName>
+                    <ColorHex>{value}</ColorHex>
+                  </ColorNameWrapper>
+                </ColorItem>
+              ))}
+            </ColorGrid>
+          </SectionInner>
+        </Section>
 
-      <Section>
-        <SectionTitle>브랜드 컬러 (Brand)</SectionTitle>
-        <ColorGrid>
-          {Object.entries(colorSystem.brand).map(([key, value]) => (
-            <ColorItem key={key}>
-              <ColorBox color={value} />
-              <ColorNameWrapper>
-                <ColorName>{key}</ColorName>
-                <ColorHex>{value}</ColorHex>
-              </ColorNameWrapper>
-            </ColorItem>
-          ))}
-        </ColorGrid>
-      </Section>
+        <Section>
+          <SectionInner>
+            <div>
+              <SectionTitle className="h6">브랜드 컬러 (Brand)</SectionTitle>
+            </div>
+            <ColorGrid>
+              {Object.entries(colorSystem.brand).map(([key, value]) => (
+                <ColorItem key={key}>
+                  <ColorBox color={value} />
+                  <ColorNameWrapper>
+                    <ColorName>{key}</ColorName>
+                    <ColorHex>{value}</ColorHex>
+                  </ColorNameWrapper>
+                </ColorItem>
+              ))}
+            </ColorGrid>
+          </SectionInner>
+        </Section>
 
-      <Section>
-        <SectionTitle>시스템 컬러 (System)</SectionTitle>
-        <ColorGrid>
-          {Object.entries(colorSystem.system).map(([category, colorSet]) => 
-            Object.entries(colorSet).map(([key, value]) => (
-              <ColorItem key={`${category}-${key}`}>
-                <ColorBox color={value} />
-                <ColorNameWrapper>
-                  <ColorName>{key}</ColorName>
-                  <ColorHex>{value}</ColorHex>
-                </ColorNameWrapper>
-              </ColorItem>
-            ))
-          )}
-        </ColorGrid>
-      </Section>
+        <Section>
+          <SectionInner>
+            <div>
+              <SectionTitle className="h6">시스템 컬러 (System)</SectionTitle>
+            </div>
+            <ColorGrid>
+              {Object.entries(colorSystem.system).map(([category, colorSet]) => 
+                Object.entries(colorSet).map(([key, value]) => (
+                  <ColorItem key={`${category}-${key}`}>
+                    <ColorBox color={value} />
+                    <ColorNameWrapper>
+                      <ColorName>{key}</ColorName>
+                      <ColorHex>{value}</ColorHex>
+                    </ColorNameWrapper>
+                  </ColorItem>
+                ))
+              )}
+            </ColorGrid>
+          </SectionInner>
+        </Section>
 
-      <Section>
-        <SectionTitle>그라데이션 (Gradients)</SectionTitle>
-        <ColorGrid>
-          {Object.entries(colorSystem.gradients).map(([key, value]) => (
-            <ColorItem key={key}>
-              <GradientBox gradient={value} />
-              <ColorNameWrapper>
-                <ColorName>{key}</ColorName>
-                <ColorHex>{value}</ColorHex>
-              </ColorNameWrapper>
-            </ColorItem>
-          ))}
-        </ColorGrid>
-      </Section>
+        <Section>
+          <SectionInner>
+            <div>
+              <SectionTitle className="h6">그라데이션 (Gradients)</SectionTitle>
+            </div>
+            <ColorGrid>
+              {Object.entries(colorSystem.gradients).map(([key, value]) => (
+                <ColorItem key={key}>
+                  <GradientBox gradient={value} />
+                  <ColorNameWrapper>
+                    <ColorName>{key}</ColorName>
+                    <ColorHex>{value}</ColorHex>
+                  </ColorNameWrapper>
+                </ColorItem>
+              ))}
+            </ColorGrid>
+          </SectionInner>
+        </Section>
 
-      <Section>
-        <SectionTitle>배경 컬러 (Background)</SectionTitle>
-        <ColorGrid>
-          {Object.entries(colorSystem.background).map(([key, value]) => (
-            <ColorItem key={key}>
-              <ColorBox color={value} />
-              <ColorNameWrapper>
-                <ColorName>{key}</ColorName>
-                <ColorHex>{value}</ColorHex>
-              </ColorNameWrapper>
-            </ColorItem>
-          ))}
-        </ColorGrid>
-      </Section>
+        <Section>
+          <SectionInner>
+            <div>
+              <SectionTitle className="h6">배경 컬러 (Background)</SectionTitle>
+            </div>
+            <ColorGrid>
+              {Object.entries(colorSystem.background).map(([key, value]) => (
+                <ColorItem key={key}>
+                  <ColorBox color={value} />
+                  <ColorNameWrapper>
+                    <ColorName>{key}</ColorName>
+                    <ColorHex>{value}</ColorHex>
+                  </ColorNameWrapper>
+                </ColorItem>
+              ))}
+            </ColorGrid>
+          </SectionInner>
+        </Section>
+      </Grid>
     </Container>
   )
 } 

@@ -16,7 +16,7 @@ const Title = styled.h2`
 `
 
 // 그리드 시스템
-const Grid = styled.div<{ columns?: 1 | 2 | 3 | 4 }>`
+export const Grid = styled.div<{ columns?: 1 | 2 | 3 | 4 }>`
   display: grid;
   gap: 28px;
   grid-template-columns: repeat(${props => props.columns || 1}, 1fr);

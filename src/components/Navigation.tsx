@@ -46,7 +46,7 @@ const navItems = [
   { name: 'Buttons', path: '/buttons' },
   { name: 'Section & Cards', path: '/sections' },
   { name: 'Header & Navigation', path: '/navigation' },
-  { name: 'Tables', path: '/tables' },
+  { name: 'Tables & Lists', path: '/tables' },
   { name: 'Fields & Items', path: '/fields' },
 ]
 
