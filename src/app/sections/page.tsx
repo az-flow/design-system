@@ -3,7 +3,6 @@
 import styled from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
 import { useState } from 'react'
-import Image from 'next/image'
 
 const Container = styled.div`
   padding: 40px;
