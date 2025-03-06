@@ -71,7 +71,7 @@ export const SectionTitle = styled.h6`
   color: ${colorSystem.neutral.black};
 `
 
-const SectionContent = styled.div<{ isOpen?: boolean }>`
+export const SectionContent = styled.div<{ isOpen?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 10px;
