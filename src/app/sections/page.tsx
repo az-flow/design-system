@@ -23,12 +23,11 @@ const Grid = styled.div<{ columns?: 1 | 2 | 3 | 4 }>`
   width: 100%;
 `
 
-// 기본 섹션 컴포넌트
-const Section = styled.div<{ collapsible?: boolean }>`
+export const Section = styled.div<{ collapsible?: boolean }>`
   width: 100%;
 `
 
-const SectionInner = styled.div<{ collapsible?: boolean; isOpen?: boolean; clickable?: boolean }>`
+export const SectionInner = styled.div<{ collapsible?: boolean; isOpen?: boolean; clickable?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -56,7 +55,7 @@ const SectionInner = styled.div<{ collapsible?: boolean; isOpen?: boolean; click
   `}
 `
 
-const SectionTitle = styled.h6`
+export const SectionTitle = styled.h6`
   color: ${colorSystem.neutral.black};
 `
 
