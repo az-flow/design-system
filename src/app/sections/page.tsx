@@ -19,8 +19,20 @@ const Title = styled.h2`
 export const Grid = styled.div<{ columns?: 1 | 2 | 3 | 4 }>`
   display: grid;
   gap: 28px;
-  grid-template-columns: repeat(${props => props.columns || 1}, 1fr);
   width: 100%;
+  grid-template-columns: repeat(1, 1fr);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(${props => Math.min(2, props.columns || 1)}, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(${props => Math.min(3, props.columns || 1)}, 1fr);
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(${props => props.columns || 1}, 1fr);
+  }
 `
 
 export const Section = styled.div<{ collapsible?: boolean }>`
