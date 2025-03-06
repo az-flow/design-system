@@ -3,7 +3,6 @@
 import styled from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
 import { Section, SectionInner, SectionTitle, Grid } from '@/app/sections/page'
-import { useState } from 'react'
 import { MdHelpOutline } from 'react-icons/md'
 
 const Container = styled.div`
