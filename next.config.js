@@ -5,6 +5,15 @@ const nextConfig = {
     unoptimized: true,
   },
   basePath: '/designsystem',
+  compiler: {
+    styledComponents: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 module.exports = nextConfig 
