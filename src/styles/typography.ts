@@ -1,5 +1,5 @@
 export type FontWeight = 'Regular' | 'Medium' | 'Semi Bold'
-export type FontSize = '48' | '40' | '32' | '28' | '24' | '18' | '16' | '14' | '12' | '10'
+export type FontSize = '48' | '40' | '32' | '28' | '24' | '20' | '18' | '16' | '14' | '12' | '10'
 export type LineHeight = '58' | '48' | '38' | '34' | '28' | '24' | '20' | '16' | '14' | '12'
 
 export const fontWeightValues = {
@@ -33,6 +33,11 @@ export const typography = {
     size: '24px',
     weight: 'Semi Bold',
     lineHeight: '28px',
+  },
+  h6: {
+    size: '20px',
+    weight: 'Semi Bold',
+    lineHeight: '24px',
   },
   subtitle1: {
     size: '18px',

@@ -5,7 +5,9 @@ import { colors } from '@/styles/colors'
 
 // Types
 export type ButtonSize = 'large' | 'mid' | 'small' | 'xsmall' | 'xxsmall'
-export type ButtonColor = 'special' | 'special_disabled' | 'primary' | 'subprimary' | 'disabled' | 'alert'
+export type FilledButtonColor = 'special' | 'special_disabled' | 'primary' | 'subprimary' | 'disabled' | 'alert'
+export type OutlineButtonColor = 'default' | 'primary' | 'subprimary' | 'disabled' | 'alert'
+export type ButtonColor = FilledButtonColor | OutlineButtonColor
 export type ButtonType = 'filled' | 'outline'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -50,7 +52,12 @@ const buttonSizeStyles = {
 }
 
 // Color styles
-const buttonColorStyles = {
+type ButtonColorStyles = {
+  filled: { [K in FilledButtonColor]: ReturnType<typeof css> }
+  outline: { [K in OutlineButtonColor]: ReturnType<typeof css> }
+}
+
+const buttonColorStyles: ButtonColorStyles = {
   filled: {
     special: css`
       background: ${colors.gradients.brand.replace('0deg', '270deg')};
@@ -91,17 +98,12 @@ const buttonColorStyles = {
     `
   },
   outline: {
-    special: css`
-      border-color: ${colors.brand.deepBlue};
-      color: ${colors.brand.deepBlue};
+    default: css`
+      border-color: ${colors.neutral.borderGrey};
+      color: ${colors.neutral.textGrey};
       &:hover {
         filter: brightness(0.9);
       }
-    `,
-    special_disabled: css`
-      border-color: ${colors.neutral.disabledGrey};
-      color: ${colors.neutral.disabledGrey};
-      cursor: not-allowed;
     `,
     primary: css`
       border-color: ${colors.brand.deepBlue};
@@ -149,6 +151,8 @@ const StyledButton = styled.button<ButtonProps>`
   line-height: 1.2;
   transition: all 0.2s ease;
   cursor: pointer;
+  font-family: 'Pretendard';
+  font-style: normal;
 
   /* Type specific styles */
   ${props => props.$type === 'filled' ? css`
@@ -162,7 +166,11 @@ const StyledButton = styled.button<ButtonProps>`
   ${props => buttonSizeStyles[props.$size || 'mid']}
 
   /* Color styles */
-  ${props => buttonColorStyles[props.$type || 'filled'][props.$color || 'primary']}
+  ${props => {
+    const type = props.$type || 'filled'
+    const color = props.$color || (type === 'filled' ? 'primary' : 'default')
+    return buttonColorStyles[type][color as any]
+  }}
 `
 
 export const Button = ({

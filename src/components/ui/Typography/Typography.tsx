@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { ElementType } from 'react'
 import styled, { css } from 'styled-components'
 import { typography, fontWeightValues } from '@/styles/typography'
 
@@ -11,6 +11,8 @@ type TypographyVariant =
   | 'caption1' | 'caption2' | 'caption3' 
   | 'label' 
   | 'button-giant' | 'button-large' | 'button-medium' | 'button-small' | 'button-tiny'
+
+type TypographyElement = ElementType
 
 export interface TypographyProps {
   variant: TypographyVariant
@@ -45,9 +47,9 @@ const variantStyles = {
     line-height: ${typography.h5.lineHeight};
   `,
   'h6': css`
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
+    font-size: ${typography.h6.size};
+    font-weight: ${fontWeightValues[typography.h6.weight]};
+    line-height: ${typography.h6.lineHeight};
   `,
   'subtitle1': css`
     font-size: ${typography.subtitle1.size};
@@ -130,8 +132,7 @@ const StyledTypography = styled.div<{ $variant: TypographyVariant }>`
   ${props => variantStyles[props.$variant]}
 `
 
-// Mapping for semantic HTML elements
-const variantElementMap: Record<TypographyVariant, keyof JSX.IntrinsicElements> = {
+const variantElementMap: Record<TypographyVariant, TypographyElement> = {
   'h1': 'h1',
   'h2': 'h2',
   'h3': 'h3',

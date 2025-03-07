@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
 import { Section, SectionInner, SectionTitle } from '@/app/sections/page'
 import { useState, useCallback } from 'react'
+import { MdEditSquare } from 'react-icons/md'
 
 const Container = styled.div`
   padding: 40px;
@@ -26,6 +27,7 @@ const Table = styled.div`
   width: 100%;
   border: 1px solid ${colorSystem.neutral.borderGrey};
   border-radius: 7px;
+  overflow: hidden;
 `
 
 const List = styled.div`
@@ -78,11 +80,15 @@ interface ColumnConfig {
   isMin?: boolean;
   isLong?: boolean;
   type: 'text' | 'number' | 'date';
+  editable?: boolean;
+  onEdit?: () => void;
 }
 
 interface RowData {
   type: 'text' | 'number' | 'date';
   value: string;
+  editable?: boolean;
+  onEdit?: () => void;
 }
 
 const getGridTemplateColumns = (columns: ColumnConfig[]) => {
@@ -103,10 +109,8 @@ const TableHeader = styled.div<{ $gridTemplate: string }>`
     padding: 12px 16px;
     font-weight: 500;
     font-size: 15px;
+    position: relative;
     border-right: 1px solid ${colorSystem.neutral.borderGrey};
-    overflow-wrap: break-word;
-    word-break: keep-all;
-    white-space: pre-wrap;
     
     &:last-child {
       border-right: none;
@@ -114,10 +118,13 @@ const TableHeader = styled.div<{ $gridTemplate: string }>`
   }
 `
 
-const TableRow = styled.div<{ $gridTemplate: string }>`
+const TableRow = styled.div<{ $gridTemplate: string; $hovered?: boolean; $clickable?: boolean }>`
   display: grid;
   grid-template-columns: ${props => props.$gridTemplate};
   border-bottom: 1px solid ${colorSystem.neutral.borderGrey};
+  background: ${props => props.$hovered ? colorSystem.background.grey : 'transparent'};
+  transition: background-color 0.2s ease;
+  cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   
   &:last-child {
     border-bottom: none;
@@ -135,7 +142,7 @@ const TableRow = styled.div<{ $gridTemplate: string }>`
   }
 `
 
-const TableCell = styled.div<{ type: 'text' | 'number' | 'date' }>`
+const TableCell = styled.div<{ type: 'text' | 'number' | 'date'; $hovered?: boolean; $clickable?: boolean }>`
   font-size: 16px;
   color: ${colorSystem.neutral.textGrey};
   width: 100%;
@@ -143,10 +150,16 @@ const TableCell = styled.div<{ type: 'text' | 'number' | 'date' }>`
   overflow-wrap: break-word;
   word-break: keep-all;
   white-space: pre-wrap;
+  background: ${props => props.$hovered ? colorSystem.background.grey : 'transparent'};
+  transition: background-color 0.2s ease;
+  cursor: ${props => props.$clickable ? 'pointer' : 'default'};
 `
 
-const TableHeaderCell = styled.div`
-  width: 100%;
+const TableHeaderCell = styled.div<{ $hovered?: boolean; $clickable?: boolean }>`
+  position: relative;
+  background: ${props => props.$hovered ? colorSystem.background.grey : '#E3E4E7'};
+  transition: background-color 0.2s ease;
+  cursor: ${props => props.$clickable ? 'pointer' : 'default'};
 `
 
 const Checkbox = styled.div<{ $checked?: boolean; $indeterminate?: boolean }>`
@@ -231,10 +244,42 @@ const ClickableListRow = styled(ListRow)`
   }
 `
 
+const EditIcon = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: ${colorSystem.neutral.textGrey};
+  border-radius: 4px;
+  margin-left: 8px;
+`
+
+const HeaderContent = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const CellContent = styled.div<{ type: 'text' | 'number' | 'date' }>`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: ${props => props.type === 'number' ? 'flex-end' : 'flex-start'};
+
+  ${EditIcon} {
+    margin-left: ${props => props.type === 'number' ? '0' : '8px'};
+    margin-right: ${props => props.type === 'number' ? '8px' : '0'};
+  }
+`
+
 export default function TablesPage() {
   const [checkedRows, setCheckedRows] = useState<boolean[]>([]);
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   
-  const columns: ColumnConfig[] = [
+  const baseColumns: ColumnConfig[] = [
     { title: 'isMin', type: 'number', isMin: true },
     { title: 'isLong', type: 'text', isLong: true },
     { title: '금액(숫자는 우측정렬)', type: 'number' },
@@ -242,9 +287,49 @@ export default function TablesPage() {
     { title: '설명1', type: 'text' },
   ];
 
+  const editableColumns: ColumnConfig[] = [
+    { title: 'isMin', type: 'number', isMin: true, editable: true, onEdit: () => console.log('Edit isMin') },
+    { title: 'isLong', type: 'text', isLong: true, editable: true, onEdit: () => console.log('Edit isLong') },
+    { title: '금액(숫자는 우측정렬)', type: 'number', editable: true, onEdit: () => console.log('Edit 금액') },
+    { title: '날짜', type: 'date', editable: true, onEdit: () => console.log('Edit 날짜') },
+    { title: '설명1', type: 'text', editable: true, onEdit: () => console.log('Edit 설명') },
+  ];
+
+  const rowEditableColumns: ColumnConfig[] = [
+    { title: 'isMin', type: 'number', isMin: true },
+    { title: 'isLong', type: 'text', isLong: true },
+    { title: '금액(숫자는 우측정렬)', type: 'number' },
+    { title: '날짜', type: 'date' },
+    { title: '설명1', type: 'text' },
+  ];
+
+  const rowEditableData: RowData[][] = [
+    [
+      { type: 'number', value: '1', editable: true, onEdit: () => console.log('Edit row 1') },
+      { type: 'text', value: '리스트의 isLong 컬럼 (1.5배 너비)' },
+      { type: 'number', value: '1,000,000,000' },
+      { type: 'date', value: '2025-02-10' },
+      { type: 'text', value: '설명' },
+    ],
+    [
+      { type: 'number', value: '2', editable: true, onEdit: () => console.log('Edit row 2') },
+      { type: 'text', value: '두 번째 항목' },
+      { type: 'number', value: '2,500,000,000' },
+      { type: 'date', value: '2025-03-15' },
+      { type: 'text', value: '설명' },
+    ],
+    [
+      { type: 'number', value: '3', editable: true, onEdit: () => console.log('Edit row 3') },
+      { type: 'text', value: '세 번째 항목' },
+      { type: 'number', value: '500,000,000' },
+      { type: 'date', value: '2025-04-20' },
+      { type: 'text', value: '설명이 길어지면 줄이 바뀌면서 height가 증가하고 위쪽 정렬로 배치' },
+    ],
+  ];
+
   const checkboxColumns: ColumnConfig[] = [
     { title: '', type: 'text', isMin: true },
-    ...columns.slice(1),
+    ...baseColumns.slice(1),
   ];
 
   const listData: RowData[][] = [
@@ -271,8 +356,10 @@ export default function TablesPage() {
     ],
   ];
 
-  const gridTemplate = getGridTemplateColumns(columns);
+  const baseGridTemplate = getGridTemplateColumns(baseColumns);
+  const editableGridTemplate = getGridTemplateColumns(editableColumns);
   const checkboxGridTemplate = getGridTemplateColumns(checkboxColumns);
+  const rowEditableGridTemplate = getGridTemplateColumns(rowEditableColumns);
 
   const handleHeaderCheckboxClick = useCallback(() => {
     const allChecked = checkedRows.length === listData.length && checkedRows.every(Boolean);
@@ -291,7 +378,7 @@ export default function TablesPage() {
   const isIndeterminate = checkedRows.some(Boolean) && !isAllChecked;
 
   const clickableColumns: ColumnConfig[] = [
-    ...columns.slice(0, -1),
+    ...baseColumns.slice(0, -1),
     { title: '', type: 'text', isMin: true },
   ];
 
@@ -312,8 +399,8 @@ export default function TablesPage() {
           </HeaderContainer>
 
           <Table>
-            <TableHeader $gridTemplate={gridTemplate}>
-              {columns.map((column, index) => (
+            <TableHeader $gridTemplate={baseGridTemplate}>
+              {baseColumns.map((column, index) => (
                 <TableHeaderCell key={index}>
                   {column.title}
                 </TableHeaderCell>
@@ -321,10 +408,126 @@ export default function TablesPage() {
             </TableHeader>
             
             {listData.map((rowData, rowIndex) => (
-              <TableRow key={rowIndex} $gridTemplate={gridTemplate}>
+              <TableRow key={rowIndex} $gridTemplate={baseGridTemplate}>
                 {rowData.map((cell, cellIndex) => (
                   <TableCell key={cellIndex} type={cell.type}>
                     {cell.value}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </Table>
+        </SectionInner>
+      </Section>
+
+      <Section>
+        <SectionInner>
+          <HeaderContainer>
+            <SectionTitle className="h6">테이블 수정가능 (컬럼)</SectionTitle>
+          </HeaderContainer>
+
+          <Table>
+            <TableHeader $gridTemplate={editableGridTemplate}>
+              {editableColumns.map((column, index) => (
+                <TableHeaderCell 
+                  key={index} 
+                  $hovered={hoveredColumn === index}
+                  $clickable={column.editable}
+                  onMouseEnter={() => setHoveredColumn(index)}
+                  onMouseLeave={() => setHoveredColumn(null)}
+                  onClick={column.editable ? column.onEdit : undefined}
+                >
+                  <HeaderContent>
+                    {column.title}
+                    {column.editable && (
+                      <EditIcon onClick={(e) => {
+                        e.stopPropagation();
+                        column.onEdit?.();
+                      }}>
+                        <MdEditSquare size={16} />
+                      </EditIcon>
+                    )}
+                  </HeaderContent>
+                </TableHeaderCell>
+              ))}
+            </TableHeader>
+            
+            {listData.map((rowData, rowIndex) => (
+              <TableRow 
+                key={rowIndex} 
+                $gridTemplate={editableGridTemplate}
+                $hovered={false}
+              >
+                {rowData.map((cell, cellIndex) => (
+                  <TableCell 
+                    key={cellIndex} 
+                    type={cell.type}
+                    $hovered={hoveredColumn === cellIndex}
+                    $clickable={editableColumns[cellIndex].editable}
+                    onMouseEnter={() => setHoveredColumn(cellIndex)}
+                    onMouseLeave={() => setHoveredColumn(null)}
+                    onClick={editableColumns[cellIndex].editable ? editableColumns[cellIndex].onEdit : undefined}
+                  >
+                    <CellContent type={cell.type}>
+                      {cell.value}
+                    </CellContent>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </Table>
+        </SectionInner>
+      </Section>
+
+      <Section>
+        <SectionInner>
+          <HeaderContainer>
+            <SectionTitle className="h6">테이블 수정가능 (행)</SectionTitle>
+          </HeaderContainer>
+
+          <Table>
+            <TableHeader $gridTemplate={rowEditableGridTemplate}>
+              {rowEditableColumns.map((column, index) => (
+                <TableHeaderCell key={index}>
+                  {column.title}
+                </TableHeaderCell>
+              ))}
+            </TableHeader>
+            
+            {rowEditableData.map((rowData, rowIndex) => (
+              <TableRow 
+                key={rowIndex} 
+                $gridTemplate={rowEditableGridTemplate}
+                $hovered={hoveredRow === rowIndex}
+                $clickable={rowData.some(cell => cell.editable)}
+                onMouseEnter={() => setHoveredRow(rowIndex)}
+                onMouseLeave={() => setHoveredRow(null)}
+                onClick={() => {
+                  const editableCell = rowData.find(cell => cell.editable);
+                  editableCell?.onEdit?.();
+                }}
+              >
+                {rowData.map((cell, cellIndex) => (
+                  <TableCell key={cellIndex} type={cell.type}>
+                    <CellContent type={cell.type}>
+                      {cell.editable && cell.type === 'number' && (
+                        <EditIcon onClick={(e) => {
+                          e.stopPropagation();
+                          cell.onEdit?.();
+                        }}>
+                          <MdEditSquare size={16} />
+                        </EditIcon>
+                      )}
+                      {cell.value}
+                      {cell.editable && cell.type !== 'number' && (
+                        <EditIcon onClick={(e) => {
+                          e.stopPropagation();
+                          cell.onEdit?.();
+                        }}>
+                          <MdEditSquare size={16} />
+                        </EditIcon>
+                      )}
+                    </CellContent>
                   </TableCell>
                 ))}
               </TableRow>
@@ -340,14 +543,14 @@ export default function TablesPage() {
           </HeaderContainer>
 
           <List>
-            <ListHeader $gridTemplate={gridTemplate}>
-              {columns.map((column, index) => (
+            <ListHeader $gridTemplate={baseGridTemplate}>
+              {baseColumns.map((column: ColumnConfig, index: number) => (
                 <div key={index}>{column.title}</div>
               ))}
             </ListHeader>
             
             {listData.map((rowData, rowIndex) => (
-              <ListRow key={rowIndex} $gridTemplate={gridTemplate}>
+              <ListRow key={rowIndex} $gridTemplate={baseGridTemplate}>
                 {rowData.map((cell, cellIndex) => (
                   <ListCell key={cellIndex} type={cell.type}>
                     {cell.value}

@@ -106,9 +106,9 @@ const GlobalStyles = createGlobalStyle`
   }
 
   h6 {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
+    font-size: ${typography.h6.size};
+    font-weight: ${fontWeightValues[typography.h6.weight]};
+    line-height: ${typography.h6.lineHeight};
   }
 
   /* Body Text Classes */

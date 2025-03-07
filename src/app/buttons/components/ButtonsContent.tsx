@@ -32,26 +32,28 @@ const SizeLabel = styled.div`
   font-size: 12px;
   color: ${colors.neutral.darkText};
   text-align: center;
-  min-width: 70px;
-  flex: 1;
-  
-  &:nth-child(1) { min-width: 120px; }
-  &:nth-child(2) { min-width: 100px; }
-  &:nth-child(3) { min-width: 90px; }
-  &:nth-child(4) { min-width: 80px; }
-  &:nth-child(5) { min-width: 70px; }
+  width: 120px;
 `
 
 const SizeLabelRow = styled(ButtonRow)`
   margin-left: 120px;
   margin-bottom: 32px;
   gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(5, 120px);
+`
+
+const ButtonsRow = styled(ButtonRow)`
+  display: grid;
+  grid-template-columns: 120px repeat(5, 120px);
+  gap: 12px;
 `
 
 // Main Component
 export default function ButtonsContent() {
   const sizes: ButtonSize[] = ['large', 'mid', 'small', 'xsmall', 'xxsmall']
-  const colors: ButtonColor[] = ['special', 'special_disabled', 'primary', 'subprimary', 'disabled', 'alert']
+  const filledColors: ButtonColor[] = ['special', 'special_disabled', 'primary', 'subprimary', 'disabled', 'alert']
+  const outlineColors: ButtonColor[] = ['default', 'primary', 'subprimary', 'disabled', 'alert']
 
   return (
     <Container>
@@ -66,8 +68,8 @@ export default function ButtonsContent() {
                 <SizeLabel key={size}>{size}</SizeLabel>
               ))}
             </SizeLabelRow>
-            {colors.map(color => (
-              <ButtonRow key={color}>
+            {filledColors.map(color => (
+              <ButtonsRow key={color}>
                 <VariantLabel>{color}</VariantLabel>
                 {sizes.map(size => (
                   <Button
@@ -79,7 +81,7 @@ export default function ButtonsContent() {
                     확인
                   </Button>
                 ))}
-              </ButtonRow>
+              </ButtonsRow>
             ))}
           </SectionContent>
         </SectionInner>
@@ -96,8 +98,8 @@ export default function ButtonsContent() {
                 <SizeLabel key={size}>{size}</SizeLabel>
               ))}
             </SizeLabelRow>
-            {colors.map(color => (
-              <ButtonRow key={color}>
+            {outlineColors.map(color => (
+              <ButtonsRow key={color}>
                 <VariantLabel>{color}</VariantLabel>
                 {sizes.map(size => (
                   <Button
@@ -109,7 +111,7 @@ export default function ButtonsContent() {
                     확인
                   </Button>
                 ))}
-              </ButtonRow>
+              </ButtonsRow>
             ))}
           </SectionContent>
         </SectionInner>
