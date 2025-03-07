@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { colorSystem } from '@/components/GlobalStyle'
 import { Section, SectionInner, SectionTitle, Grid } from '@/components/ui/Section'
 import { FormField } from '@/components/ui/Fields'
-import { MdHelpOutline } from 'react-icons/md'
+import { MdHelpOutline, MdInfo, MdCheckCircle, MdError } from 'react-icons/md'
+import { Callout } from '@/components/ui/Callout/Callout'
 
 const Container = styled.div`
   padding: 40px;
@@ -168,6 +169,15 @@ export default function FieldsPage() {
   return (
     <Container>
       <Title>필드</Title>
+      <Callout variant="info">
+        콜아웃 컴포넌트를 사용할 수 있습니다.
+      </Callout>
+      <Callout variant="success">
+        성공적으로 저장되었습니다.
+      </Callout>
+      <Callout variant="error">
+        오류가 발생했습니다. 다시 시도해주세요.
+      </Callout>
 
       <Grid columns={2}>
         <Section>
