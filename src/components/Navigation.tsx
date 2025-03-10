@@ -78,6 +78,7 @@ const navItems = [
   { name: 'Header & Navigation', path: '/navigation' },
   { name: 'Tables & Lists', path: '/tables' },
   { name: 'Fields & Items', path: '/fields' },
+  { name: 'Modals', path: '/modals' },
 ]
 
 export default function Navigation() {
