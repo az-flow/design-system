@@ -79,6 +79,7 @@ const navItems = [
   { name: 'Tables & Lists', path: '/tables' },
   { name: 'Fields & Items', path: '/fields' },
   { name: 'Modals', path: '/modals' },
+  { name: 'History', path: '/history' },
 ]
 
 export default function Navigation() {
