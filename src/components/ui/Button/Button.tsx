@@ -169,7 +169,10 @@ const StyledButton = styled.button<ButtonProps>`
   ${props => {
     const type = props.$type || 'filled'
     const color = props.$color || (type === 'filled' ? 'primary' : 'default')
-    return buttonColorStyles[type][color as any]
+    if (type === 'filled') {
+      return buttonColorStyles.filled[color as FilledButtonColor]
+    }
+    return buttonColorStyles.outline[color as OutlineButtonColor]
   }}
 `
 

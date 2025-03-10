@@ -5,6 +5,7 @@ import { colors } from '@/styles/colors'
 import { Section, SectionInner, SectionTitle, SectionContent } from '@/components/ui/Section'
 import { Button, ButtonSize, ButtonColor, ButtonType } from '@/components/ui/Button'
 import { Typography } from '@/components/ui/Typography'
+import { Tag } from '@/components/ui/Tag'
 
 // Layout Components
 const Container = styled.div`
@@ -120,14 +121,47 @@ export default function ButtonsContent() {
       <Section>
         <SectionInner>
           <div>
-            <SectionTitle className="h6">Typography 컴포넌트 사용 예시</SectionTitle>
+            <SectionTitle className="h6">Tags</SectionTitle>
           </div>
           <SectionContent>
-            <Typography variant="h1">H1 제목</Typography>
-            <Typography variant="h2">H2 제목</Typography>
-            <Typography variant="body1">Body1 텍스트</Typography>
-            <Typography variant="caption1">Caption1 텍스트</Typography>
-            <Typography variant="button-medium">Button Medium 텍스트</Typography>
+            <ButtonRow>
+              <Tag deletable onDelete={() => console.log('delete')}>본계정공동</Tag>
+              <Tag>일반태그</Tag>
+              <Tag color="info" deletable onDelete={() => console.log('delete')}>정보태그</Tag>
+              <Tag color="warning">경고태그</Tag>
+              <Tag color="error" deletable onDelete={() => console.log('delete')}>에러태그</Tag>
+            </ButtonRow>
+            <ButtonRow>
+              <Tag 
+                type="file"
+                fileName="file.jpg"
+                fileSize="50mb"
+                fileStatus="uploading"
+                deletable
+                onDelete={() => console.log('delete')}
+              />
+            </ButtonRow>
+            <ButtonRow>
+              <Tag 
+                type="file"
+                fileName="file.jpg"
+                fileSize="50mb"
+                fileStatus="failed"
+                deletable
+                onDelete={() => console.log('delete')}
+                onRetry={() => console.log('retry upload')}
+              />
+            </ButtonRow>
+            <ButtonRow>
+              <Tag 
+                type="file"
+                fileName="file.jpg"
+                fileSize="50mb"
+                fileStatus="success"
+                deletable
+                onDelete={() => console.log('delete')}
+              />
+            </ButtonRow>
           </SectionContent>
         </SectionInner>
       </Section>
